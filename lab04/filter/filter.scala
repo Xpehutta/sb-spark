@@ -6,14 +6,12 @@ import scala.collection.mutable.Map
 object filter {
 
   def main(args: Array[String]): Unit = {
-
     val spark: SparkSession = SparkSession
       .builder()
-      .appName("Lab04")
+      .appName("Lab04_filter")
       .config("spark.sql.session.timeZone", "UTC")
       .getOrCreate()
 
-    // get params
     val topicName = spark
       .sparkContext
       .getConf
@@ -36,22 +34,19 @@ object filter {
       kafkaParams += ("subscribe" -> topicName.get)
     }
 
+
     if(offset.isDefined && offset.get != "earliest") {
-      val offset_str: String = "{\"" + topicName.get + "\":{\"0\":" + offset.get + "}}"
+      val offset_str: String = "{\"" + topicName + "\":{\"0\":" + offset.get + "}}"
       kafkaParams += ("startingOffsets" -> offset_str)
     }
-
     println("kafkaParams -> "+ kafkaParams)
-
     val df = spark.read
       .format("kafka")
-      .options(kafkaParams)
-      .load
-
+      .options(kafkaParams).load
     import spark.implicits._
-
     val jsonString: Dataset[String] = df.select(col("value").cast("string")).as[String]
     val VisitsKafkaDF = spark.read.json(jsonString)
+
 
     val BuyVisitsDF = VisitsKafkaDF //VisitsDF
       .filter(col("event_type")==="buy")
