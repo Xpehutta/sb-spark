@@ -36,7 +36,7 @@ object filter {
 
 
     if(offset.isDefined && offset.get != "earliest") {
-      val offset_str: String = "{\"" + topicName + "\":{\"0\":" + offset.get + "}}"
+      val offset_str: String = "{\"" + topicName.get + "\":{\"0\":" + offset.get + "}}"
       kafkaParams += ("startingOffsets" -> offset_str)
     }
     println("kafkaParams -> "+ kafkaParams)
