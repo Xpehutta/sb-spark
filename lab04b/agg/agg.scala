@@ -59,7 +59,7 @@ def uData: DataFrame = parsedSdf
 val data = uData
       .selectExpr("cast(start_ts as string) as key", "to_json(struct(*)) as value")
       .writeStream
-      .trigger(Trigger.ProcessingTime("5 seconds"))
+      .trigger(Trigger.ProcessingTime("10 seconds"))
       .format("kafka")
       .option("checkpointLocation", s"user/nikolay.abramov/tmp/chk/lab04")
       .option("kafka.bootstrap.servers", "spark-master-1:6667")
