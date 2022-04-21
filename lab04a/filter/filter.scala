@@ -56,8 +56,8 @@ object filter {
 
     val BuyVisitsDF = VisitsKafkaDF //VisitsDF
       .filter(col("event_type")==="buy")
-      .withColumn("date", from_unixtime(col("timestamp")/1000,"yyyymmdd"))
-      .withColumn("p_date", from_unixtime(col("timestamp")/1000,"yyyymmdd"))
+      .withColumn("date", from_unixtime(col("timestamp")/1000,"yyyyMMdd"))
+      .withColumn("p_date", from_unixtime(col("timestamp")/1000,"yyyyMMdd"))
 
     BuyVisitsDF
       .write
